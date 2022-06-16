@@ -5,7 +5,8 @@ fn main() {
         .insert_resource(Msaa { samples: 4 })
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup)
-        .add_system(character_movement)
+        .add_system(character_controller)
+        .add_system(camera_follow)
         .run();
 }
 
@@ -33,22 +34,27 @@ fn setup(
             transform: Transform::from_xyz(0.0, 0.5, 0.0),
             ..default()
         })
-        .insert(Character);
+        .insert(CharacterController)
+        .insert(CameraFollowTarget);
 
     // Spawn a camera
-    commands.spawn_bundle(PerspectiveCameraBundle {
-        transform: Transform::from_xyz(0.0, 2.0, -5.0).looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    });
+    commands
+        .spawn_bundle(PerspectiveCameraBundle {
+            // transform: Transform::from_xyz(0.0, 2.0, -5.0).looking_at(Vec3::ZERO, Vec3::Y),
+            ..default()
+        })
+        .insert(CameraFollow);
+
+    commands.insert_resource(CameraFollowConfig { offset: Vec3::new(0.0, 2.0, -5.0) });
 }
 
 #[derive(Component)]
-struct Character;
+struct CharacterController;
 
-fn character_movement(
+fn character_controller(
     input: Res<Input<KeyCode>>,
     time: Res<Time>,
-    mut char_query: Query<&mut Transform, With<Character>>,
+    mut char_query: Query<&mut Transform, With<CharacterController>>,
 ) {
     let mut move_dir = Vec2::default();
 
@@ -74,5 +80,35 @@ fn character_movement(
         let mut transform = char_query.single_mut();
         transform.translation.x += move_dir.x * time.delta_seconds();
         transform.translation.z += move_dir.y * time.delta_seconds();
+    }
+}
+
+#[derive(Component)]
+struct CameraFollow;
+
+#[derive(Component)]
+struct CameraFollowTarget;
+
+struct CameraFollowConfig {
+    offset: Vec3,
+}
+
+fn camera_follow(
+    mut cam_query: Query<&mut Transform, With<CameraFollow>>,
+    target_query: Query<&Transform, (With<CameraFollowTarget>, Without<CameraFollow>)>,
+    config: Res<CameraFollowConfig>,
+) {
+    if target_query.is_empty() || cam_query.is_empty() {
+        return;
+    }
+
+    let target = target_query.single();
+    let mut cam = cam_query.single_mut();
+
+    let target_position = target.translation + config.offset;
+
+    if (target_position - cam.translation).length() > f32::EPSILON {
+        cam.translation = target_position;
+        cam.look_at(target.translation, Vec3::Y);
     }
 }
