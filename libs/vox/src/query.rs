@@ -1,9 +1,6 @@
 use bevy_math::prelude::*;
 
-use crate::{
-    math,
-    structures::{chunk, voxel},
-};
+use crate::{chunk, math, voxel};
 
 pub struct RangeIterator {
     begin: IVec3,
@@ -214,9 +211,8 @@ fn voxel_raycast(
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::vec;
     use rand::Rng;
-
+    use std::vec;
 
     #[test]
     fn range() {

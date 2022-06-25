@@ -157,7 +157,7 @@ mod tests {
     use rand::random;
     use ron::de::from_reader;
 
-    use crate::structures::voxel::KindDescription;
+    use crate::voxel::KindDescription;
 
     #[test]
     fn faces_occlusion() {
