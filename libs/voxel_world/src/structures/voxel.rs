@@ -294,14 +294,15 @@ mod tests {
         }
     }
 
-    // #[test]
-    // fn load_kind_descriptions() {
-    //     let input_path = format!(
-    //         "{}/assets/voxels/kind_descriptions.ron",
-    //         env!("CARGO_MANIFEST_DIR")
-    //     );
-    //     let f = std::fs::File::open(&input_path).expect("Failed opening kind descriptions file");
+    #[test]
+    fn load_kind_descriptions() {
+        let input_path = format!(
+            "{}assets/voxels/kind_descriptions.ron",
+            env!("CARGO_WORKSPACE_DIR")
+        );
+        let f = std::fs::File::open(&input_path)
+            .unwrap_or_else(|_| panic!("Failed opening kind descriptions file at {}", input_path));
 
-    //     let _: Vec<KindDescription> = from_reader(f).unwrap();
-    // }
+        let _: Vec<KindDescription> = from_reader(f).unwrap();
+    }
 }
