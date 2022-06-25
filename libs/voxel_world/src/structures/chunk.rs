@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use bevy::prelude::*;
+use bevy_math::prelude::*;
 
 use serde::{de::DeserializeOwned, ser::SerializeSeq, Deserialize, Serialize};
 
@@ -337,15 +337,8 @@ pub fn overlap_voxel(pos: IVec3) -> (IVec3, IVec3) {
 
 #[cfg(test)]
 mod tests {
-    use bevy::math::IVec3;
+    use super::*;
     use rand::{random, Rng};
-
-    use crate::structures::{
-        chunk::{ChunkKind, ChunkStorageType, AXIS_ENDING, AXIS_SIZE},
-        voxel,
-    };
-
-    use super::{ChunkNeighborhood, ChunkStorage};
 
     #[test]
     fn to_xyz() {

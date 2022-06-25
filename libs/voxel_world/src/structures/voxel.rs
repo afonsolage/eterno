@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy_math::prelude::*;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -153,14 +153,11 @@ pub fn to_world(local: IVec3, chunk_local: IVec3) -> Vec3 {
 
 #[cfg(test)]
 mod tests {
-
-    use bevy::math::{IVec3, Vec3};
+    use super::*;
     use rand::random;
     use ron::de::from_reader;
 
     use crate::structures::voxel::KindDescription;
-
-    use super::{chunk, FacesOcclusion};
 
     #[test]
     fn faces_occlusion() {

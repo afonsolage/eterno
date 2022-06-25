@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy_math::prelude::*;
 
 use crate::{
     math,
@@ -213,12 +213,10 @@ fn voxel_raycast(
 
 #[cfg(test)]
 mod test {
+    use super::*;
     use std::vec;
-
-    use bevy::math::{IVec3, Vec3};
     use rand::Rng;
 
-    use super::RaycastHit;
 
     #[test]
     fn range() {
