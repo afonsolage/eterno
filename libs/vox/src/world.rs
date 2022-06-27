@@ -7,11 +7,11 @@ use super::{
 };
 
 #[derive(Default)]
-pub struct World {
+pub struct VoxWorld {
     chunks: HashMap<IVec3, ChunkKind>,
 }
 
-impl World {
+impl VoxWorld {
     pub fn add(&mut self, local: IVec3, kind: ChunkKind) {
         if self.chunks.insert(local, kind).is_some() {
             panic!("Created a duplicated chunk at {:?}", &local);
@@ -51,11 +51,10 @@ impl World {
 mod test {
     use super::*;
     use crate::chunk;
-    use crate::world::World;
 
     #[test]
     fn add() {
-        let mut world = World::default();
+        let mut world = VoxWorld::default();
         assert!(world.get(IVec3::ONE).is_none());
         world.add(IVec3::ONE, ChunkKind::default());
         assert!(world.get(IVec3::ONE).is_some());
@@ -64,14 +63,14 @@ mod test {
     #[test]
     #[should_panic]
     fn add_duplicated() {
-        let mut world = World::default();
+        let mut world = VoxWorld::default();
         world.add(IVec3::ONE, ChunkKind::default());
         world.add(IVec3::ONE, ChunkKind::default());
     }
 
     #[test]
     fn remove() {
-        let mut world = World::default();
+        let mut world = VoxWorld::default();
         world.add(IVec3::ONE, ChunkKind::default());
         assert!(world.remove(IVec3::ONE).is_some());
         assert!(world.get(IVec3::ONE).is_none());
@@ -79,14 +78,14 @@ mod test {
 
     #[test]
     fn remove_none() {
-        let mut world = World::default();
+        let mut world = VoxWorld::default();
         assert!(world.remove(IVec3::ONE).is_none());
         assert!(world.get(IVec3::ONE).is_none());
     }
 
     #[test]
     fn update_neighborhood() {
-        let mut world = World::default();
+        let mut world = VoxWorld::default();
 
         let center = (1, 1, 1).into();
         let mut kind = ChunkKind::default();
