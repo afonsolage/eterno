@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use bevy_math::prelude::*;
+use bevy::prelude::*;
 
 use serde::{de::DeserializeOwned, ser::SerializeSeq, Deserialize, Serialize};
 

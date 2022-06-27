@@ -1,4 +1,4 @@
-use bevy_math::prelude::*;
+use bevy::prelude::*;
 use std::collections::HashMap;
 
 use super::{
@@ -51,6 +51,7 @@ impl World {
 mod test {
     use super::*;
     use crate::chunk;
+    use crate::world::World;
 
     #[test]
     fn add() {
